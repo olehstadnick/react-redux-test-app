@@ -34,6 +34,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
     
     const handleClose = () => {
         setShow(false);
+        changeSearch('');
         setColumns({
             ...columns,
             ['selected']: {
@@ -49,6 +50,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
 
     const handleApply = () => {
         setShow(false);
+        changeSearch('');
         updateSelectedColumns(columns['selected'].items);
     };
 
@@ -200,12 +202,13 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
                                                             minHeight: 500
                                                         }}
                                                     >
-                                                        {column.items.map((item, index) => {
+                                                        {column.items.length ? column.items.map((item, index) => {
                                                             return (
                                                                 <Draggable
                                                                     key={item.id}
                                                                     draggableId={item.id}
                                                                     index={index}
+                                                                    isDragDisabled={column.items.length === 1}
                                                                 >
                                                                     {(provided, snapshot) => {
                                                                         return (
@@ -230,7 +233,11 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
                                                                             >
                                                                                 {item.content}
                                                                                 {columnId == 'selected' ?
-                                                                                    <Button variant="secondary" onClick={() => handleDelete(item)}>
+                                                                                    <Button
+                                                                                        variant="secondary"
+                                                                                        onClick={() => handleDelete(item)}
+                                                                                        disabled={column.items.length === 1}
+                                                                                    >
                                                                                         x
                                                                                     </Button> : ''
                                                                                 }
@@ -240,7 +247,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
                                                                     }}
                                                                 </Draggable>
                                                             );
-                                                        })}
+                                                        }) : <div>No items</div>}
                                                         {provided.placeholder}
                                                     </div>
                                                 );
