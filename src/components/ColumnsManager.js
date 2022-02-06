@@ -30,6 +30,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
     const [show, setShow] = useState(false);
     const [search, changeSearch] = useState('');
     const [columns, setColumns] = useState(columnsState);
+    const [searchLength, setSearchLength] = useState(0);
     
     const handleClose = () => {
         setShow(false);
@@ -92,19 +93,42 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
 
     const handleSearch = (e) => {
         let value = e.target.value;
-        changeSearch(value);
 
-        setColumns({
-            ...columns,
-            ['items']: {
-                ...columns['items'],
-                items: otherColumns.filter(item => item.content.toLowerCase().includes(value.toLowerCase()))
-            },
-        });
+        if(value.length < searchLength) {
+            let selectedColumnsId = [];
+            columns.selected.items.map(i => {
+                selectedColumnsId.push(i.id)
+            });
+
+            let otherColumns = allColumns.filter(v => {
+                if(!includes(selectedColumnsId, v.id)) {
+                    return v;
+                }
+            });
+
+            setColumns({
+                ...columns,
+                ['items']: {
+                    ...columns['items'],
+                    items: otherColumns.filter(item => item.content.toLowerCase().includes(value.toLowerCase()))
+                },
+            });
+        } else {
+            setColumns({
+                ...columns,
+                ['items']: {
+                    ...columns['items'],
+                    items: columns.items.items.filter(item => item.content.toLowerCase().includes(value.toLowerCase()))
+                },
+            });
+        }
+
+        setSearchLength(value.length);
+        changeSearch(value);
     };
 
     const handleDelete = (item) => {
-        let filterSelected = selectedColumns.filter(function(e){
+        let filterSelected = columns.selected.items.filter(function(e){
             return e.id != item.id;
         });
 
@@ -116,7 +140,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
             },
             ['items']: {
                 ...columns['items'],
-                items: concat(otherColumns, {...item})
+                items: concat(columns.items.items, {...item})
             }
         });
     };
@@ -228,7 +252,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
                         </DragDropContext>
                     </Row>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className="justify-content-between">
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>

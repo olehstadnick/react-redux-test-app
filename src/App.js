@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import {connect} from "react-redux";
-import {Container, Row, Col, Table} from 'react-bootstrap';
+import {Container, Row, Col, Table, Card} from 'react-bootstrap';
 import parse from 'html-react-parser';
 
 import {
@@ -96,35 +96,39 @@ function App({users, getUsers, allColumns, selectedColumns, columnNames, updateS
     return (
         <div className="App my-3">
             <Container>
-                <Row className="mb-3 align-items-center">
-                    <Col>
-                        Users
-                    </Col>
-                    <Col className="text-right">
-                        <div className="float-end">
-                            <ColumnsManager
-                                allColumns={allColumns}
-                                selectedColumns={selectedColumns}
-                                columnNames={columnNames}
-                                updateSelectedColumns={updateSelectedColumns}
-                            />
-                        </div>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Table striped bordered hover>
-                            <thead>
-                            <tr>
-                                {parse(getThs())}
-                            </tr>
-                            </thead>
-                            <tbody>
-                                {parse(getTds())}
-                            </tbody>
-                        </Table>
-                    </Col>
-                </Row>
+                <Card>
+                    <Card.Body>
+                        <Row className="mb-3 align-items-center">
+                            <Col>
+                                Users
+                            </Col>
+                            <Col className="text-right">
+                                <div className="float-end">
+                                    <ColumnsManager
+                                        allColumns={allColumns}
+                                        selectedColumns={selectedColumns}
+                                        columnNames={columnNames}
+                                        updateSelectedColumns={updateSelectedColumns}
+                                    />
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Table striped bordered hover>
+                                    <thead>
+                                    <tr>
+                                        {parse(getThs())}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {parse(getTds())}
+                                    </tbody>
+                                </Table>
+                            </Col>
+                        </Row>
+                    </Card.Body>
+                </Card>
             </Container>
         </div>
     );
