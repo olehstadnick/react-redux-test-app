@@ -7,7 +7,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
 
     let selectedColumnsId = [];
     selectedColumns.map(i => {
-        selectedColumnsId.push(i.id)
+        return selectedColumnsId.push(i.id);
     });
 
     let otherColumns = allColumns.filter(v => {
@@ -17,11 +17,11 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
     });
 
     const columnsState = {
-        ['items']: {
+        'items': {
             name: "items",
             items: otherColumns
         },
-        ['selected']: {
+        'selected': {
             name: "selected",
             items: selectedColumns,
         },
@@ -37,11 +37,11 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
         changeSearch('');
         setColumns({
             ...columns,
-            ['selected']: {
+            'selected': {
                 ...columns['selected'],
                 items: selectedColumns,
             },
-            ['items']: {
+            'items': {
                 ...columns['items'],
                 items: otherColumns
             }
@@ -99,7 +99,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
         if(value.length < searchLength) {
             let selectedColumnsId = [];
             columns.selected.items.map(i => {
-                selectedColumnsId.push(i.id)
+                return selectedColumnsId.push(i.id);
             });
 
             let otherColumns = allColumns.filter(v => {
@@ -110,7 +110,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
 
             setColumns({
                 ...columns,
-                ['items']: {
+                'items': {
                     ...columns['items'],
                     items: otherColumns.filter(item => item.content.toLowerCase().includes(value.toLowerCase()))
                 },
@@ -118,7 +118,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
         } else {
             setColumns({
                 ...columns,
-                ['items']: {
+                'items': {
                     ...columns['items'],
                     items: columns.items.items.filter(item => item.content.toLowerCase().includes(value.toLowerCase()))
                 },
@@ -131,16 +131,16 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
 
     const handleDelete = (item) => {
         let filterSelected = columns.selected.items.filter(function(e){
-            return e.id != item.id;
+            return e.id !== item.id;
         });
 
         setColumns({
             ...columns,
-            ['selected']: {
+            'selected': {
                 ...columns['selected'],
                 items: filterSelected,
             },
-            ['items']: {
+            'items': {
                 ...columns['items'],
                 items: concat(columns.items.items, {...item})
             }
@@ -208,7 +208,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
                                                                     key={item.id}
                                                                     draggableId={item.id}
                                                                     index={index}
-                                                                    isDragDisabled={column.items.length === 1}
+                                                                    isDragDisabled={column.name === 'selected' && column.items.length === 1}
                                                                 >
                                                                     {(provided, snapshot) => {
                                                                         return (
@@ -232,7 +232,7 @@ export default function ColumnsManager({allColumns, selectedColumns, updateSelec
                                                                                 }}
                                                                             >
                                                                                 {item.content}
-                                                                                {columnId == 'selected' ?
+                                                                                {columnId === 'selected' ?
                                                                                     <Button
                                                                                         variant="secondary"
                                                                                         onClick={() => handleDelete(item)}
